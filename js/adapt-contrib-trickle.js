@@ -24,6 +24,7 @@ define(function(require) {
                 this.listenTo(Adapt, 'pageView:ready', this.startTrickle);
                 this.listenTo(Adapt, 'blockView:preRender', this.hideView);
                 this.listenTo(Adapt, 'articleView:preRender', this.hideView);
+                this.listenTo(Adapt, 'articleView:postRender', this.setFinalView);
                 this.listenTo(Adapt.blocks, 'change:_isComplete', this.blockSetToComplete);
                 this.listenTo(Adapt.blocks, 'change:_isVisible', this.elementSetToVisible);
                 this.listenTo(Adapt.articles, 'change:_isVisible', this.elementSetToVisible);
@@ -46,6 +47,13 @@ define(function(require) {
 
             hideView: function(view) {
                 view.$el.addClass('trickle-hidden');
+            },
+            
+            setFinalView: function(view){
+               var finalElement = this.pageElements[this.pageElements.length-1];
+                if (finalElement.get('_isComplete')) {
+                    this.showFinal(finalElement);
+                }
             },
 
             hideAllElements: function() {
